@@ -1,7 +1,7 @@
 import s from './ContactList.module.css';
 import ContactItem from '../ContactItem/ContactItem';
 import { useSelector } from 'react-redux';
-import { useGetContactsApiQuery } from 'redux/contactsApi';
+import { useGetContactsApiQuery } from 'redux/contactsSlice';
 import {selectFilter} from 'redux/filterSlice';
 
 const ContactList = () => {
