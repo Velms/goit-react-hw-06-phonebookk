@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
 import s from './ContactForm.module.css';
-import {
-  useAddContactMutation,
-  useGetContactsApiQuery,
-} from 'redux/contactsApi';
+import PropTypes from 'prop-types';
 
-export default function ContactForm() {
+export default function ContactForm({ onSubmit }) {
   const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [addContact] = useAddContactMutation();
-  const { data } = useGetContactsApiQuery();
+  const [number, setNumber] = useState('');
 
   const handleChange = e => {
     const prop = e.currentTarget.name;
@@ -17,32 +12,24 @@ export default function ContactForm() {
       case 'name':
         setName(e.currentTarget.value);
         break;
-      case 'phone':
-        setPhone(e.currentTarget.value);
+      case 'number':
+        setNumber(e.currentTarget.value);
         break;
       default:
         throw new Error('Error');
     }
   };
 
-  const handleAddContact = async e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    if (
-      data.find(contact => contact.name.toLowerCase() === name.toLowerCase())
-    ) {
-      setName('');
-      setPhone('');
-      return alert(`Number: ${name} is already in phonebook`);
-    }
-    if (name && phone) {
-      await addContact({ name: name, phone: phone }).unwrap();
-      setName('');
-      setPhone('');
-    }
+
+    onSubmit({ name, number });
+    setName('');
+    setNumber('');
   };
 
   return (
-    <form className={s.form} onSubmit={handleAddContact}>
+    <form className={s.form} onSubmit={handleSubmit}>
       <label>
         Name
         <input
@@ -60,10 +47,10 @@ export default function ContactForm() {
         Number
         <input
           className={s.inputNumber}
-          value={phone}
+          value={number}
           onChange={handleChange}
           type="tel"
-          name="phone"
+          name="number"
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
@@ -76,3 +63,7 @@ export default function ContactForm() {
     </form>
   );
 }
+
+ContactForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};

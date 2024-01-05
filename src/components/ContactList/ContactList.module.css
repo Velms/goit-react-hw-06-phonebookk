@@ -10,7 +10,16 @@
     -0.5rem -0.5rem 2rem rgb(172, 171, 171);
 }
 
-.text {
-  margin: 0;
-  color: #fff;
+/* .item {
+  background-color: #fff;
+  border: 1px solid #000;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
 }
+
+.contact {
+  margin-right: 30px;
+} */
