@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import ContactItem from '../ContactItem/ContactItem';
 // import Notification from 'components/Notification';
 
+export const ContactList = () => {
+  const filter = useSelector(state => state.filter.value);
+}
+
 const ContactList = ({ contacts, onDeleteContact }) => (
   <ul className={s.list}>
     {contacts.map(({ id, name, number }) => (
