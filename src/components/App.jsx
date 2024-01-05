@@ -1,88 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import shortid from 'shortid';
-import s from './App.module.css';
-import ContactList from './ContactList/ContactList';
+import React from 'react';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from '../redux/store'; // Import your Redux store
+
 import ContactForm from './ContactForm';
 import Filter from './Filter';
-import Notification from './Notification';
+import ContactList from './ContactList';
 
-export default function App() {
-  const [contacts, setContacts] = useState(
-    JSON.parse(localStorage.getItem('contacts')) ?? []
-  );
-  const [filter, setFilter] = useState('');
-
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
-
-  const addContact = ({ name, number }) => {
-    const normalizedName = name.toLowerCase();
-
-    const isAdded = contacts.find(el => {
-      return (el.name.toLowerCase() === normalizedName) 
-    });
-
-    if (isAdded) {
-      alert(`${name} is already in contacts`);
-      return;
-    }
-    const contact = {
-      id: shortid.generate(),
-      name: name,
-      number: number,
-    };
-
-    setContacts(prevContacts => [...prevContacts, contact]);
-  };
-
-  const changeFilter = e => {
-    setFilter(e.currentTarget.value.trim());
-  };
-
-  const getVisibleContacts = () => {
-    const normalizedFilter = filter.toLowerCase();
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normalizedFilter)
-    );
-  };
-
-  const deleteContact = todoId => {
-    setContacts(prevState =>
-      prevState.filter(contact => contact.id !== todoId)
-    );
-  };
-
-  const visibleContacts = getVisibleContacts();
-
+function App() {
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        fontSize: 18,
-        color: '#010101',
-      }}
-    >
-      <h1>Phonebook</h1>
-      <ContactForm onSubmit={addContact} />
-
-      <h2 className={s.titleContacts}>Contacts</h2>
-      <div className={s.allContacts}>All contacts: {contacts.length}</div>
-
-      {contacts.length > 0 ? (
-        <>
-          <Filter value={filter} onChange={changeFilter} />
-          <ContactList
-            contacts={visibleContacts}
-            onDeleteContact={deleteContact}
-          />
-        </>
-      ) : (
-        <Notification message="Contact list is empty" />
-      )}
-    </div>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <div>
+          <h1>Книга контактів</h1>
+          <ContactForm />
+          <h2>Контакти</h2>
+          <Filter />
+          <ContactList />
+        </div>
+      </PersistGate>
+    </Provider>
   );
 }
+
+export default App;
