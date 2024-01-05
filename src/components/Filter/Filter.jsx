@@ -2,6 +2,7 @@ import React from 'react';
 import s from './Filter.module.css';
 import PropTypes from 'prop-types';
 
+
 const Filter = ({ value, onChange }) => (
   <div className={s.filter}>
     <label className={s.labelFilter}>

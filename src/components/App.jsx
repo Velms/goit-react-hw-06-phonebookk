@@ -1,26 +1,17 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { store, persistor } from '../redux/store'; // Import your Redux store
+import store, { persistor } from './store';
+import AppContainer from './AppContainer';
 
-import ContactForm from './ContactForm';
-import Filter from './Filter';
-import ContactList from './ContactList';
-
-function App() {
+const App = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <div>
-          <h1>Книга контактів</h1>
-          <ContactForm />
-          <h2>Контакти</h2>
-          <Filter />
-          <ContactList />
-        </div>
+        <AppContainer />
       </PersistGate>
     </Provider>
   );
-}
+};
 
 export default App;
