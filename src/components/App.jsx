@@ -7,6 +7,54 @@ import Filter from './Filter';
 import Notification from './Notification';
 
 export default function App() {
+  const [contacts, setContacts] = useState(
+    JSON.parse(localStorage.getItem('contacts')) ?? []
+  );
+  const [filter, setFilter] = useState('');
+
+  useEffect(() => {
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts]);
+
+  const addContact = ({ name, number }) => {
+    const normalizedName = name.toLowerCase();
+
+    const isAdded = contacts.find(el => {
+      return (el.name.toLowerCase() === normalizedName) 
+    });
+
+    if (isAdded) {
+      alert(`${name} is already in contacts`);
+      return;
+    }
+    const contact = {
+      id: shortid.generate(),
+      name: name,
+      number: number,
+    };
+
+    setContacts(prevContacts => [...prevContacts, contact]);
+  };
+
+  const changeFilter = e => {
+    setFilter(e.currentTarget.value.trim());
+  };
+
+  const getVisibleContacts = () => {
+    const normalizedFilter = filter.toLowerCase();
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizedFilter)
+    );
+  };
+
+  const deleteContact = todoId => {
+    setContacts(prevState =>
+      prevState.filter(contact => contact.id !== todoId)
+    );
+  };
+
+  const visibleContacts = getVisibleContacts();
+
   return (
     <div
       style={{
